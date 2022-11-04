@@ -10,7 +10,7 @@ class Game:
 		# general setup
 		pygame.init()
 		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
-		pygame.display.set_caption('Zelda')
+		pygame.display.set_caption('')
 		self.clock = pygame.time.Clock()
 
 		self.BG = pygame.image.load("../graphics/main-menu/Background.png")
@@ -22,12 +22,14 @@ class Game:
 		self.main_sound.set_volume(0.5)
 		self.main_sound.play(loops = -1)
 		self.isSoundPlayed= True
+		self.enableCoinSound= True
+		self.enablePlayerSound= True
 
 	def get_font(self, size): # Returns Press-Start-2P in the desired size
 		return pygame.font.Font("../graphics/font/joystix.ttf", size)
 	
 	def play(self):
-		self.level = Level()
+		self.level = Level(self.enableCoinSound, self.enablePlayerSound)
 		while True:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -52,21 +54,28 @@ class Game:
 			
 			OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
-			OPTIONS_TEXT = self.get_font(45).render("SOUND: ", True, 'White')
+			OPTIONS_TEXT = self.get_font(45).render("BACK GROUND MUSIC SOUND: ", True, 'White')
 			OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(540, 260))
 			self.screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-			OPTIONS_BACK = Button(image=None, pos=(640, 460), 
+			OPTIONS_BACK = Button(image=None, pos=(640, 600), 
 								text_input="BACK", font=self.get_font(75), base_color="White", hovering_color="Green")
-			soundImg= pygame.transform.scale(pygame.image.load("../graphics/soundIcon/sound_icon.png"), (150, 150)) if self.isSoundPlayed else pygame.transform.scale(pygame.image.load("../graphics/soundIcon/noSound_icon.png"), (150, 150))
-			SOUND_BACK = Button(image=soundImg, pos=(740, 260), 
+			bgsoundImg= pygame.transform.scale(pygame.image.load("../graphics/soundIcon/sound_icon.png"), (150, 150)) if self.isSoundPlayed else pygame.transform.scale(pygame.image.load("../graphics/soundIcon/noSound_icon.png"), (150, 150))
+			gsoundImg= pygame.transform.scale(pygame.image.load("../graphics/soundIcon/sound_icon.png"), (150, 150)) if self.enableCoinSound else pygame.transform.scale(pygame.image.load("../graphics/soundIcon/noSound_icon.png"), (150, 150))
+			BGSOUND_BACK = Button(image=bgsoundImg, pos=(1050, 260), 
+				text_input="", font=self.get_font(75), base_color="White", hovering_color="Green")
+			GAMESOUND_TEXT = self.get_font(45).render("GAME MUSIC SOUND: ", True, 'White')
+			GAMESOUND_RECT = OPTIONS_TEXT.get_rect(center=(540, 460))
+			self.screen.blit(GAMESOUND_TEXT, GAMESOUND_RECT)
+			GAMESOUNDBTN= Button(image=gsoundImg, pos=(780, 460), 
 				text_input="", font=self.get_font(75), base_color="White", hovering_color="Green")
 
-
 			OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-			SOUND_BACK.changeColor(OPTIONS_MOUSE_POS)
+			BGSOUND_BACK.changeColor(OPTIONS_MOUSE_POS)
+			GAMESOUNDBTN.changeColor(OPTIONS_MOUSE_POS)
 			OPTIONS_BACK.update(self.screen)
-			SOUND_BACK.update(self.screen)
+			BGSOUND_BACK.update(self.screen)
+			GAMESOUNDBTN.update(self.screen)
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -75,13 +84,20 @@ class Game:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
 						self.main_menu()
-				if SOUND_BACK.checkForInput(OPTIONS_MOUSE_POS) and event.type == pygame.MOUSEBUTTONUP:
+				if BGSOUND_BACK.checkForInput(OPTIONS_MOUSE_POS) and event.type == pygame.MOUSEBUTTONUP:
 					if self.isSoundPlayed:
 						self.main_sound.set_volume(0)
 						self.isSoundPlayed= False
 					else:
 						self.main_sound.set_volume(0.5)
 						self.isSoundPlayed = True
+				if GAMESOUNDBTN.checkForInput(OPTIONS_MOUSE_POS) and event.type == pygame.MOUSEBUTTONUP:
+					if self.enableCoinSound:
+						self.enableCoinSound= False
+						self.enablePlayerSound= False
+					else:
+						self.enableCoinSound= True
+						self.enablePlayerSound= True
 
 			pygame.display.update()
 			self.screen.blit(self.BG, [0,0])
@@ -106,6 +122,7 @@ class Game:
 			ToanImg= pygame.transform.scale(pygame.image.load("../graphics/ava/Toan.png"), (150, 150))
 			ToanText = self.get_font(45).render("VÕ MINH TOÀN - 1915570", True, "Black")
 			ToanRect = ABOUT_TEXT.get_rect(center=(400, 480))
+			DucImg= pygame.transform.scale(pygame.image.load("../graphics/ava/Duc.png"), (120, 120))
 			DucText = self.get_font(45).render("HOÀNG KIM ANH ĐỨC - 1811958", True, "Black")
 			DucRect = ABOUT_TEXT.get_rect(center=(400, 630))
 
@@ -115,10 +132,8 @@ class Game:
 			self.screen.blit(CuongText, CuongRect)
 			self.screen.blit(ToanImg,(20, 400))
 			self.screen.blit(ToanText, ToanRect)
-			self.screen.blit(ToanImg,(20, 550))
+			self.screen.blit(DucImg,(20, 550))
 			self.screen.blit(DucText, DucRect)
-
-   
 
 			ABOUT_BACK = Button(image=None, pos=(1100, 50), 
 								text_input="BACK", font=self.get_font(50), base_color="Black", hovering_color="Green")
@@ -168,12 +183,13 @@ class Game:
 			pygame.display.update()
 
 	def main_menu(self):
+		bg= pygame.image.load("../graphics/background/bg.jpg")
 		while True:
-			self.screen.blit(self.BG, (0, 0))
+			self.screen.blit(bg, (0, 0))
 
 			MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-			MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
+			MENU_TEXT = self.get_font(100).render("HOME", True, "#b68f40")
 			MENU_RECT = MENU_TEXT.get_rect(center=(640, 50))
 
 			PLAY_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 180), 
