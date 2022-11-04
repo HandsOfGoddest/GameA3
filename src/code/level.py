@@ -13,6 +13,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
 
+TOTAL_ENEMIES =40
 class Level:
 	def __init__(self, enableCoinSound, enablePlayerSound):
 
@@ -20,6 +21,7 @@ class Level:
 		self.display_surface = pygame.display.get_surface()
 		self.game_paused = False
 		self.game_over = False
+		self.winning= False
 		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
 
 		# sprite group setup
@@ -157,7 +159,10 @@ class Level:
 		self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
 
 	def add_exp(self,amount):
-
+		TOTAL_ENEMIES-=1
+		if TOTAL_ENEMIES <=0:
+			self.winning = True
+		self.player.coin+=1
 		self.player.exp += amount
 
 	def check_coin_collisions(self):
@@ -184,6 +189,10 @@ class Level:
 			self.coin_sprites.update()
 			self.visible_sprites.enemy_update(self.player)
 			self.player_attack_logic()
+
+		if self.winning:
+			self.winning= False
+			return ["Wining", self.player.exp]
 
 		if self.game_over:
 			self.game_over = False
