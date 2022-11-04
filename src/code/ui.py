@@ -9,6 +9,7 @@ class UI:
 		self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
 
 		# bar setup 
+		
 		self.health_bar_rect = pygame.Rect(10,10,HEALTH_BAR_WIDTH,BAR_HEIGHT)
 		self.energy_bar_rect = pygame.Rect(10,34,ENERGY_BAR_WIDTH,BAR_HEIGHT)
 
@@ -70,6 +71,20 @@ class UI:
 			pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,bg_rect,3)
 		return bg_rect
 
+	def avatar(self, img):
+		bg_rect = self.selection_box(160,630,False)
+		avt_surf = img
+		avt_rect = avt_surf.get_rect(center = bg_rect.center)
+
+		self.display_surface.blit(avt_surf,avt_rect)
+  
+	def avatar2(self, img):
+		bg_rect = self.selection_box(220,10,False)
+		avt_surf = img
+		avt_rect = avt_surf.get_rect(center = bg_rect.center)
+
+		self.display_surface.blit(avt_surf,avt_rect)
+
 	def weapon_overlay(self,weapon_index,has_switched):
 		bg_rect = self.selection_box(10,630,has_switched)
 		weapon_surf = self.weapon_graphics[weapon_index]
@@ -91,6 +106,7 @@ class UI:
 		self.show_exp(player.exp)
 
 		self.show_coins(player.coin)
-
+		self.avatar(player.image)
+		self.avatar2(player.avt)
 		self.weapon_overlay(player.weapon_index,not player.can_switch_weapon)
 		self.magic_overlay(player.magic_index,not player.can_switch_magic)
