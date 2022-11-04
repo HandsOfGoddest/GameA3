@@ -93,12 +93,35 @@ class Game:
 			
 			self.screen.fill("white")
 
-			ABOUT_TEXT = self.get_font(45).render("This is the OPTIONS screen.", True, "Black")
-			ABOUT_RECT = ABOUT_TEXT.get_rect(center=(640, 260))
+			ABOUT_TEXT = self.get_font(45).render("ABOUT US", True, "Black")
+			ABOUT_RECT = ABOUT_TEXT.get_rect(center=(200, 50))
 			self.screen.blit(ABOUT_TEXT, ABOUT_RECT)
 
-			ABOUT_BACK = Button(image=None, pos=(640, 460), 
-								text_input="BACK", font=self.get_font(75), base_color="Black", hovering_color="Green")
+			HieuImg= pygame.transform.scale(pygame.image.load("../graphics/ava/Hieu.png"), (150, 150))
+			HieuText = self.get_font(45).render("NGUYỄN ĐÌNH HIẾU - 1913341", True, "Black")
+			HieuRect = ABOUT_TEXT.get_rect(center=(400, 180))
+			CuongImg= pygame.transform.scale(pygame.image.load("../graphics/ava/Cuong.png"), (150, 150))
+			CuongText = self.get_font(45).render("ĐẶNG HÙNG CƯỜNG - 1912817", True, "Black")
+			CuongRect = ABOUT_TEXT.get_rect(center=(400, 330))
+			ToanImg= pygame.transform.scale(pygame.image.load("../graphics/ava/Toan.png"), (150, 150))
+			ToanText = self.get_font(45).render("VÕ MINH TOÀN - 1915570", True, "Black")
+			ToanRect = ABOUT_TEXT.get_rect(center=(400, 480))
+			DucText = self.get_font(45).render("HOÀNG KIM ANH ĐỨC - 1811958", True, "Black")
+			DucRect = ABOUT_TEXT.get_rect(center=(400, 630))
+
+			self.screen.blit(HieuImg,(20, 100))
+			self.screen.blit(HieuText, HieuRect)
+			self.screen.blit(CuongImg,(20, 250))
+			self.screen.blit(CuongText, CuongRect)
+			self.screen.blit(ToanImg,(20, 400))
+			self.screen.blit(ToanText, ToanRect)
+			self.screen.blit(ToanImg,(20, 550))
+			self.screen.blit(DucText, DucRect)
+
+   
+
+			ABOUT_BACK = Button(image=None, pos=(1100, 50), 
+								text_input="BACK", font=self.get_font(50), base_color="Black", hovering_color="Green")
 
 			ABOUT_BACK.changeColor(ABOUT_MOUSE_POS)
 			ABOUT_BACK.update(self.screen)
@@ -178,7 +201,7 @@ class Game:
 					if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
 						self.options()
 					if ABOUT_BUTTON.checkForInput(MENU_MOUSE_POS):
-						self.options()
+						self.about()
 					if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
 						pygame.quit()
 						sys.exit()
