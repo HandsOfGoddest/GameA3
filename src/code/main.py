@@ -136,18 +136,18 @@ class Game:
 			MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
 			MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
-			PLAY_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 250), 
+			PLAY_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 230), 
 								text_input="NEW GAME", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			OPTIONS_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 400), 
+			OPTIONS_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 430), 
 								text_input="OPTIONS", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			ABOUT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 400), 
+			ABOUT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 600), 
 								text_input="OPTIONS", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			QUIT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Quit Rect.png"), pos=(640, 550), 
+			QUIT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Quit Rect.png"), pos=(640, 750), 
 								text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
 			self.screen.blit(MENU_TEXT, MENU_RECT)
 
-			for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+			for button in [PLAY_BUTTON, OPTIONS_BUTTON, ABOUT_BUTTON, QUIT_BUTTON]:
 				button.changeColor(MENU_MOUSE_POS)
 				button.update(self.screen)
 			
