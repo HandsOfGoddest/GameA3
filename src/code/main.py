@@ -18,9 +18,10 @@ class Game:
 		self.score = 0
 
 		# sound 
-		main_sound = pygame.mixer.Sound('../audio/main.ogg')
-		main_sound.set_volume(0.5)
-		main_sound.play(loops = -1)
+		self.main_sound = pygame.mixer.Sound('../audio/main.ogg')
+		self.main_sound.set_volume(0.5)
+		self.main_sound.play(loops = -1)
+		self.isSoundPlayed= True
 
 	def get_font(self, size): # Returns Press-Start-2P in the desired size
 		return pygame.font.Font("../graphics/font/joystix.ttf", size)
@@ -45,20 +46,27 @@ class Game:
 			self.clock.tick(FPS)
 
 	def options(self):
+		self.screen.blit(self.BG, (0, 0))
+     
 		while True:
-			OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 			
-			self.screen.fill("white")
+			OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
-			OPTIONS_TEXT = self.get_font(45).render("This is the OPTIONS screen.", True, "Black")
-			OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
+			OPTIONS_TEXT = self.get_font(45).render("SOUND: ", True, 'White')
+			OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(540, 260))
 			self.screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
 			OPTIONS_BACK = Button(image=None, pos=(640, 460), 
-								text_input="BACK", font=self.get_font(75), base_color="Black", hovering_color="Green")
+								text_input="BACK", font=self.get_font(75), base_color="White", hovering_color="Green")
+			soundImg= pygame.transform.scale(pygame.image.load("../graphics/soundIcon/sound_icon.png"), (150, 150)) if self.isSoundPlayed else pygame.transform.scale(pygame.image.load("../graphics/soundIcon/noSound_icon.png"), (150, 150))
+			SOUND_BACK = Button(image=soundImg, pos=(740, 260), 
+				text_input="", font=self.get_font(75), base_color="White", hovering_color="Green")
+
 
 			OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+			SOUND_BACK.changeColor(OPTIONS_MOUSE_POS)
 			OPTIONS_BACK.update(self.screen)
+			SOUND_BACK.update(self.screen)
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -67,10 +75,19 @@ class Game:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
 						self.main_menu()
+				if SOUND_BACK.checkForInput(OPTIONS_MOUSE_POS) and event.type == pygame.MOUSEBUTTONUP:
+					if self.isSoundPlayed:
+						self.main_sound.set_volume(0)
+						self.isSoundPlayed= False
+					else:
+						self.main_sound.set_volume(0.5)
+						self.isSoundPlayed = True
 
 			pygame.display.update()
+			self.screen.blit(self.BG, [0,0])
    
 	def about(self):
+     
 		while True:
 			ABOUT_MOUSE_POS = pygame.mouse.get_pos()
 			
@@ -134,15 +151,15 @@ class Game:
 			MENU_MOUSE_POS = pygame.mouse.get_pos()
 
 			MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
-			MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+			MENU_RECT = MENU_TEXT.get_rect(center=(640, 50))
 
-			PLAY_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 230), 
+			PLAY_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 180), 
 								text_input="NEW GAME", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			OPTIONS_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 430), 
+			OPTIONS_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 330), 
 								text_input="OPTIONS", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			ABOUT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 600), 
-								text_input="OPTIONS", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-			QUIT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Quit Rect.png"), pos=(640, 750), 
+			ABOUT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Options Rect.png"), pos=(640, 480), 
+								text_input="ABOUT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+			QUIT_BUTTON = Button(image=pygame.image.load("../graphics/main-menu/Quit Rect.png"), pos=(640, 630), 
 								text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
 			self.screen.blit(MENU_TEXT, MENU_RECT)
@@ -159,6 +176,8 @@ class Game:
 					if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
 						self.play()
 					if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+						self.options()
+					if ABOUT_BUTTON.checkForInput(MENU_MOUSE_POS):
 						self.options()
 					if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
 						pygame.quit()
