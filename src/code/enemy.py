@@ -4,7 +4,7 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
+	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp, enablePlayerSound):
 
 		# general setup
 		super().__init__(groups)
@@ -52,6 +52,7 @@ class Enemy(Entity):
 		self.death_sound.set_volume(0.6)
 		self.hit_sound.set_volume(0.6)
 		self.attack_sound.set_volume(0.6)
+		self.enablePlayerSound= enablePlayerSound
 
 	def import_graphics(self,name):
 		self.animations = {'idle':[],'move':[],'attack':[]}
@@ -87,7 +88,8 @@ class Enemy(Entity):
 		if self.status == 'attack':
 			self.attack_time = pygame.time.get_ticks()
 			self.damage_player(self.attack_damage,self.attack_type)
-			self.attack_sound.play()
+			if self.enablePlayerSound:
+				self.attack_sound.play()
 		elif self.status == 'move':
 			self.direction = self.get_player_distance_direction(player)[1]
 		else:
@@ -123,7 +125,8 @@ class Enemy(Entity):
 
 	def get_damage(self,player,attack_type):
 		if self.vulnerable:
-			self.hit_sound.play()
+			if self.enablePlayerSound:
+				self.hit_sound.play()
 			self.direction = self.get_player_distance_direction(player)[1]
 			if attack_type == 'weapon':
 				self.health -= player.get_full_weapon_damage()
@@ -137,7 +140,8 @@ class Enemy(Entity):
 			self.kill()
 			self.trigger_death_particles(self.rect.center,self.monster_name)
 			self.add_exp(self.exp)
-			self.death_sound.play()
+			if self.enablePlayerSound:
+				self.death_sound.play()
 
 	def hit_reaction(self):
 		if not self.vulnerable:

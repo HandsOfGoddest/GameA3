@@ -4,7 +4,7 @@ from support import import_folder
 from entity import Entity
 
 class Player(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
+	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic, enablePlayerSound):
 		super().__init__(groups)
 		self.image = pygame.image.load('../graphics/test/player.png').convert_alpha()
 		self.avt = pygame.image.load('../graphics/player/Faceset.png').convert_alpha()
@@ -54,7 +54,9 @@ class Player(Entity):
 
 		# import a sound
 		self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
-		self.weapon_attack_sound.set_volume(0.4)
+		if enablePlayerSound:	self.weapon_attack_sound.set_volume(0.4)
+		else:	self.weapon_attack_sound.set_volume(0)
+		print(enablePlayerSound)
 
 	def import_player_assets(self):
 		character_path = '../graphics/player/'

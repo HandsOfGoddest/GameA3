@@ -14,7 +14,7 @@ from magic import MagicPlayer
 from upgrade import Upgrade
 
 class Level:
-	def __init__(self):
+	def __init__(self, enableCoinSound, enablePlayerSound):
 
 		# get the display surface 
 		self.display_surface = pygame.display.get_surface()
@@ -31,7 +31,11 @@ class Level:
 		self.current_attack = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
-
+		
+  		# Config: sound
+		self.enableCoinSound= enableCoinSound
+		self.enablePlayerSound= enablePlayerSound
+  
 		# sprite setup
 		self.create_map()
 
@@ -42,7 +46,7 @@ class Level:
 
 		# particles
 		self.animation_player = AnimationPlayer()
-		self.magic_player = MagicPlayer(self.animation_player)
+		self.magic_player = MagicPlayer(self.animation_player, enablePlayerSound)
 
 	def create_map(self):
 		layouts = {
@@ -91,7 +95,8 @@ class Level:
 									self.obstacle_sprites,
 									self.create_attack,
 									self.destroy_attack,
-									self.create_magic)
+									self.create_magic,
+         							self.enablePlayerSound)
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
@@ -104,7 +109,8 @@ class Level:
 									self.obstacle_sprites,
 									self.damage_player,
 									self.trigger_death_particles,
-									self.add_exp)
+									self.add_exp,
+         							self.enablePlayerSound)
 
 	def create_attack(self):
 		
@@ -157,7 +163,7 @@ class Level:
 	def check_coin_collisions(self):
 		collided_coins = pygame.sprite.spritecollide(self.player,self.coin_sprites,True)
 		if collided_coins:
-			self.coin_sound.play()
+			if self.enableCoinSound:	self.coin_sound.play()
 			for coin in collided_coins:
 				self.player.coin += 1
 				print(self.player.coin)
