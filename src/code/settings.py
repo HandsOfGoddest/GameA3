@@ -1,4 +1,6 @@
 # game setup
+TOTAL_ENEMIES = 4
+
 WIDTH    = 1280	
 HEIGTH   = 720
 FPS      = 60

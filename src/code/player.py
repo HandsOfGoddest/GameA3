@@ -43,7 +43,7 @@ class Player(Entity):
 		self.upgrade_cost = {'health': 2, 'energy': 2, 'attack': 2, 'magic' : 2, 'speed': 2}
 		self.health = self.stats['health'] * 0.5
 		self.energy = self.stats['energy'] * 0.8
-		self.exp = 5000
+		self.exp = 0
 		self.coin = 0
 		self.speed = self.stats['speed']
 
@@ -56,7 +56,6 @@ class Player(Entity):
 		self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
 		if enablePlayerSound:	self.weapon_attack_sound.set_volume(0.4)
 		else:	self.weapon_attack_sound.set_volume(0)
-		print(enablePlayerSound)
 
 	def import_player_assets(self):
 		character_path = '../graphics/player/'

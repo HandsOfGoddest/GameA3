@@ -13,7 +13,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
 
-TOTAL_ENEMIES =40
+
 class Level:
 	def __init__(self, enableCoinSound, enablePlayerSound):
 
@@ -159,8 +159,11 @@ class Level:
 		self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
 
 	def add_exp(self,amount):
-		TOTAL_ENEMIES-=1
-		if TOTAL_ENEMIES <=0:
+		global TOTAL_ENEMIES
+		TOTAL_ENEMIES -= 1
+		print(TOTAL_ENEMIES)
+		if TOTAL_ENEMIES <= 0:
+			print(TOTAL_ENEMIES)
 			self.winning = True
 		self.player.coin+=1
 		self.player.exp += amount
@@ -171,7 +174,6 @@ class Level:
 			if self.enableCoinSound:	self.coin_sound.play()
 			for coin in collided_coins:
 				self.player.coin += 1
-				print(self.player.coin)
 
 	def toggle_menu(self):
 
@@ -191,8 +193,8 @@ class Level:
 			self.player_attack_logic()
 
 		if self.winning:
-			self.winning= False
-			return ["Wining", self.player.exp]
+			self.winning = False
+			return ["Winning", self.player.exp]
 
 		if self.game_over:
 			self.game_over = False
