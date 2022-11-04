@@ -44,6 +44,9 @@ class Game:
 			if game_score[0] == "Over":
 				self.score = game_score[1]
 				self.game_over()
+			elif game_score[0] == "Winning":
+				self.score = game_score[1]
+				self.wining()
 			pygame.display.update()
 			self.clock.tick(FPS)
 
@@ -179,6 +182,43 @@ class Game:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if GAME_OVER_BACK.checkForInput(GAME_OVER_MOUSE_POS):
 						self.main_menu()
+
+			pygame.display.update()
+   
+	def wining(self):
+		gobg= pygame.transform.scale(pygame.image.load("../graphics/background/gobg_1.png"), (1280, 720))
+		while True:
+			self.screen.blit(gobg, (0,0))
+			GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
+
+			GAME_OVER_TEXT = self.get_font(70).render("CONGRATULATION", True, "Red")
+			HIGH_SCORE_TEXT = self.get_font(60).render("YOUR SCORE IS " + str(self.score), True, "Yellow")
+
+			GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(640, 210))
+			HIGH_SCORE_RECT = HIGH_SCORE_TEXT.get_rect(center=(640, 360))
+
+			self.screen.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
+			self.screen.blit(HIGH_SCORE_TEXT, HIGH_SCORE_RECT)
+
+			PLAY_AGAIN_BTN= Button(image=None, pos=(640, 460), 
+								text_input="PLAY AGAIN ?", font=self.get_font(40), base_color="White", hovering_color="Red")
+			BTN_BACK = Button(image=None, pos=(640, 560), 
+								text_input="BACK TO MENU", font=self.get_font(40), base_color="White", hovering_color="Red")
+
+			BTN_BACK.changeColor(GAME_OVER_MOUSE_POS)
+			BTN_BACK.update(self.screen)
+			PLAY_AGAIN_BTN.changeColor(GAME_OVER_MOUSE_POS)
+			PLAY_AGAIN_BTN.update(self.screen)
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					if BTN_BACK.checkForInput(GAME_OVER_MOUSE_POS):
+						self.main_menu()
+					if PLAY_AGAIN_BTN.checkForInput(GAME_OVER_MOUSE_POS):
+						self.play()
 
 			pygame.display.update()
 
