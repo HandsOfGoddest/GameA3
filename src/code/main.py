@@ -152,22 +152,22 @@ class Game:
 			pygame.display.update()
 
 	def game_over(self):
+		gobg= pygame.transform.scale(pygame.image.load("../graphics/background/gobg_1.png"), (1280, 720))
 		while True:
+			self.screen.blit(gobg, (0,0))
 			GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
-			
-			self.screen.fill("white")
 
-			GAME_OVER_TEXT = self.get_font(100).render("Game Over !!!", True, "Black")
-			HIGH_SCORE_TEXT = self.get_font(45).render("Your score is " + str(self.score), True, "Black")
+			GAME_OVER_TEXT = self.get_font(150).render("GAME OVER", True, "Red")
+			HIGH_SCORE_TEXT = self.get_font(60).render("YOUR SCORE IS " + str(self.score), True, "Yellow")
 
-			GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(640, 160))
-			HIGH_SCORE_RECT = HIGH_SCORE_TEXT.get_rect(center=(640, 260))
+			GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(640, 210))
+			HIGH_SCORE_RECT = HIGH_SCORE_TEXT.get_rect(center=(640, 360))
 
 			self.screen.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
 			self.screen.blit(HIGH_SCORE_TEXT, HIGH_SCORE_RECT)
 
-			GAME_OVER_BACK = Button(image=None, pos=(640, 660), 
-								text_input="BACK TO MAIN MENU", font=self.get_font(30), base_color="Black", hovering_color="Green")
+			GAME_OVER_BACK = Button(image=None, pos=(640, 560), 
+								text_input="BACK TO MENU", font=self.get_font(40), base_color="White", hovering_color="Red")
 
 			GAME_OVER_BACK.changeColor(GAME_OVER_MOUSE_POS)
 			GAME_OVER_BACK.update(self.screen)
